@@ -166,7 +166,7 @@ end
 --- create a split window
 function M.open_split_win(opts)
 	opts = opts or {}
-	local win_width = math.floor((opts.width or 0.5) * vim.o.columns)
+	local win_width = math.floor((opts.width or 0.75) * vim.o.columns)
 	local win_height = math.floor((opts.height or 0.5) * vim.o.lines)
 	local row = math.floor((vim.o.lines - win_height) / 2)
 	local col = math.floor((vim.o.columns - win_width) / 2)
@@ -280,7 +280,7 @@ function M.chat(prompt)
 				end)
 			end,
 		})
-	else
+	elseif M.state.llm_provider == "open_ai" then
 		curl.post("https://api.openai.com/v1/responses", {
 			headers = {
 				["Content-Type"] = "application/json",
@@ -297,6 +297,8 @@ function M.chat(prompt)
 				end)
 			end,
 		})
+	else
+		print("Invalid llm provider " .. M.state.llm_provider)
 	end
 end
 
